@@ -19,7 +19,9 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 class Player(pygame.sprite.Sprite):
-    COLOR = ( 255, 0, 0)
+    COLOR = (255, 0, 0)
+    GRAVITY = 1
+
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
         self.x_vel = 0
@@ -27,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.mask = None
         self.direction = "left"
         self.animation_count = 0
+        self.fall_count = 0
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -45,12 +48,14 @@ class Player(pygame.sprite.Sprite):
             self.animation_count = 0
 
     def loop(self, fps):
+        self.y_vel += min(1, (self.fall_count / fps)* self.GRAVITY)
         self.move(self.x_vel, self.y_vel)
+
+        self.fall_count += 1 
+
 
     def draw(self, win):
         pygame.draw.rect(win, self.COLOR, self.rect)
-
-
 
 
 def get_background(name):
@@ -60,7 +65,7 @@ def get_background(name):
     _, _, width, height = image.get_rect()
     tiles = []
 
-    for i in range(WIDTH // width + 1 ):
+    for i in range(WIDTH // width + 1):
         for j in range(HEIGHT // height + 1):
             pos = (i * width, j * height)
             tiles.append(pos)
@@ -83,6 +88,7 @@ def handle_move(player):
     if keys[pygame.K_RIGHT]:
         player.move_right(PLAYER_VEL)
 
+
 def main(window):
     clock = pygame.time.Clock()
     background, bg_image = get_background("Blue.png")
@@ -101,9 +107,6 @@ def main(window):
     pygame.quit()
     quit()
 
+
 if __name__ == "__main__":
     main(window)
-
-
-
-
