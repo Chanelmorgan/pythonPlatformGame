@@ -97,7 +97,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_count += 1
         self.update()
 
-    def update():
+    def update(self):
         self.rect = self.sprite.get_rect(topLeft=(self.rect.x, self.y))
         self.mask = pygame.mask.from_surface(self.sprite)
 
